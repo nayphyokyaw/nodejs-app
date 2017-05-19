@@ -10,15 +10,14 @@ var server = http.createServer(app);
 var io = socketIO(server);
 
 app.use(express.static(publicPath));
-
- //index.html socket
-io.on('connection', (socket) => {
+io.on('connection', (socket) => {  //index.html socket
   console.log('new user connected');
 
-  socket.emit('newMessage', {
-    from: 'Jhon',
-    text: 'someOne call me.'
-  });
+  // socket.emit('newMessage', {
+  //   from: 'Jhon',
+  //   text: 'someOne call me.'
+  // });
+
   // socket.emit('newEmail', {
   //   from: 'mike@example.com',
   //   text: 'Hay. What is going on',
@@ -27,6 +26,11 @@ io.on('connection', (socket) => {
 
     socket.on('createMessage',(message) => {
       console.log('createMessage', message);
+      io.emit('newMessage', {
+        form: message.from,
+        text: message.text,
+        createAt: new Date().getTime() // Time method
+      })
     });
 
     socket.on('createEmail', (newEmail) => {
