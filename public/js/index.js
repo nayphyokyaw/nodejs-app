@@ -23,20 +23,16 @@ socket.on('newLocationMessage', function(message){
     li.append(a);
     jQuery('#messages').append(li);
 });
-//Evernt ACKnoledgements
-// socket.emit('createMessage', {
-//     from:'Frank',
-//     text:'Hi'
-// }, function (data) {
-//     console.log('Got it', data);
-// });// alart message server and clients
-
 jQuery('#message-form').on('submit', function(e){
     e.preventDefault();// preventDefault is refresh beheriabira
+
+    var messageTextbox = jQuery('[name=message]');
+
     socket.emit('createMessage', {
         from: 'User',
-        text: jQuery('[name=message]').val()
+        text: messageTextbox.val()
     }, function(){
+        messageTextbox.val('')
     });
 });
 
@@ -45,12 +41,17 @@ locationButton.on('click', function() {
     if(!navigator.geolocation){
     return alert('Gerolocation not supported by your browser.')
     }
+
+    locationButton.attr('disabled', 'disabled').text('sending location....');
+
     navigator.geolocation.getCurrentPosition(function (position){
+        locationButton.removeAttr('disabled').text('sending location ....');
         socket.emit('createLocationMessage',{
             latitide: position.coords.latitude,
             longitude: position.coords.longitude
         });
     }, function(){
+        locationButton.removeAttr('disabled').text('sending location ....');
         alert('Unable to fetch location')
     });
 });

@@ -14,6 +14,7 @@ app.use(express.static(publicPath)); // path join
 
 io.on('connection', (socket) => {  //index.html socket
   console.log('new user connected');
+
 //admin and all clients show newMessage when start web chats app
   socket.emit('newMessage', generateMessage('Admin','welcome to chat app'));
 //admin alway show clients newMessage when start web chats app
@@ -21,20 +22,17 @@ io.on('connection', (socket) => {  //index.html socket
 
 
   socket.on('createMessage', (message, callback) => {
-    console.log('createMessage', message);
+      console.log('createMessage', message);
     io.emit('newMessage', generateMessage(message.from, message.text));
-        callback('This is from the Server');
-     // socket.broadcast.emit('newMessage', {
-     //   from: message.from,
-     //   text: message.text,
-     //   createdAt: new Date().getTime()
-     // });
-});//socket.on clients & server createMessage ending
+        callback();
+        });//socket.on clients & server createMessage ending
+
    socket.on('createLocationMessage', (coords) => {
       io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitide, coords.longitude));
    });
-  socket.on('disconnect', () => {
-    console.log('User was disconnect');
+
+    socket.on('disconnect', () => {
+        console.log('User was disconnect');
 });// socket.on server message disconnect ending
 });//io.on server message connection ending
 
