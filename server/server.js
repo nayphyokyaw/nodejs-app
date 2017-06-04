@@ -8,7 +8,7 @@ const {isRealString} = require('./utils/validation');
 const {Users} = require('./utils/users');
 
 const publicPath = path.join(__dirname, '../public');
-const prots = process.env.PORT || 3000
+const port = process.env.PORT || 3000
 var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
@@ -47,7 +47,7 @@ io.on('connection', (socket) => {  //index.html socket
        var user = users.getUser(socket.id);
 
        if(user){
-        io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitide, coords.longitude));   
+        io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitide, coords.longitude));
        }
     });
 
@@ -61,6 +61,6 @@ io.on('connection', (socket) => {  //index.html socket
 });// socket.on server message disconnect ending
 });//io.on server message connection ending
 
-server.listen(3000, () => {
-  console.log(`Server is starting on prots: ${prots}`);
+server.listen(port, () => {
+  console.log("Server is starting on port:" + port );
 });
